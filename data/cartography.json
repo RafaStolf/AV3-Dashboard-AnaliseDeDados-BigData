@@ -1,0 +1,9 @@
+{
+  "source": "IBGE API de Malhas",
+  "url": "https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo%2Bjson&qualidade=minima&intrarregiao=UF",
+  "downloaded_at": "2026-11-19",
+  "features": 27,
+  "sha256": "07c671aa87aa1ab296c446de6294df9827112782537b996c0a160284907e7c0f",
+  "scope": "Limites de UF consultados na API; municípios das observações seguem cadastro de referência 2010",
+  "license": "Consultar termos de uso do IBGE"
+}

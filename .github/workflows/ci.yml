@@ -1,0 +1,99 @@
+name: Validate dashboard
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_sqlite, sqlite3, mbstring, intl, zip
+          tools: composer:v2
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-interaction
+      - name: Prepare isolated test environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views bootstrap/cache
+      - name: Install frontend dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts --include=optional
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Laravel tests (in-memory SQLite)
+        run: composer test
+
+  data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify delivered dataset without network or raw snapshots
+        run: python -B scripts/data/build_atlas.py --verify
+      - name: Offline pipeline regression checks
+        run: python -B -m unittest discover -s scripts/data -p 'test_*.py' -v
+
+  containers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build PHP and Nginx targets
+        run: |
+          docker build --target app -t atlas-dashboard-app:ci .
+          docker build --target nginx -t atlas-dashboard-nginx:ci .
+      - name: Validate trusted connector and reject spoofed headers
+        env:
+          IMAGE_TAG: ci
+        run: sh deploy/tests/proxy.sh
+      - name: Boot isolated stack and check origin
+        env:
+          IMAGE_TAG: ci
+        run: |
+          cp .env.example .env
+          key=$(docker run --rm --entrypoint php atlas-dashboard-app:ci -r 'echo "base64:".base64_encode(random_bytes(32));')
+          printf '\nAPP_KEY=%s\n' "$key" >> .env
+          docker compose up -d --no-build --wait --wait-timeout 180
+          curl --fail http://127.0.0.1:8088/up
+          curl --fail http://127.0.0.1:8088/api/bootstrap
+          curl --fail --silent --compressed -D /tmp/atlas-headers http://127.0.0.1:8088/api/bootstrap > /dev/null
+          grep -iq 'content-encoding: gzip' /tmp/atlas-headers
+          curl --fail http://127.0.0.1:8088/ > /tmp/index.html
+          asset=$(grep -oE '/build/assets/[^" ]+\.js' /tmp/index.html | head -1)
+          test -n "$asset"
+          curl --fail "http://127.0.0.1:8088$asset" > /dev/null
+          for path in /.env /composer.json /data/atlas_municipios.csv /other.php /build/other.php; do
+            code=$(curl --silent --output /dev/null --write-out '%{http_code}' "http://127.0.0.1:8088$path")
+            case "$code" in 403|404) ;; *) echo "Unexpected $code for $path"; exit 1;; esac
+          done
+          docker compose exec -T app php deploy/sqlite.php backup /var/www/html/storage/app/backups/ci.sqlite
+          docker compose exec -T app php deploy/sqlite.php verify /var/www/html/storage/app/backups/ci.sqlite
+          docker compose up -d --no-build --force-recreate --wait --wait-timeout 180
+          docker compose logs app | grep -q 'Existing dataset preserved.'
+          docker compose stop nginx app
+          docker compose run --rm --no-deps -e RESTORE_OFFLINE=yes app php deploy/sqlite.php restore /var/www/html/storage/app/backups/ci.sqlite
+          docker compose up -d --no-build --wait --wait-timeout 180
+          docker compose exec -T app php deploy/sqlite.php verify /var/www/html/storage/app/atlas.sqlite
+          curl --fail http://127.0.0.1:8088/api/bootstrap > /dev/null
+      - name: Container logs
+        if: failure()
+        run: docker compose logs --no-color
+      - name: Remove isolated CI resources
+        if: always()
+        run: docker compose down --volumes

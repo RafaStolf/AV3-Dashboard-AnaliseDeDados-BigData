@@ -1,0 +1,7 @@
+services:
+  app:
+    env_file: !override
+      - deploy/validation/.env
+  nginx:
+    ports: !override
+      - "127.0.0.1:18888:8080"

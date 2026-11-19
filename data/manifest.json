@@ -1,0 +1,750 @@
+{
+  "schema_version": 1,
+  "dataset": "Brasil em Perspectiva — Atlas municipal censitário",
+  "generated_at_utc": "2026-11-19T02:45:32+00:00",
+  "generator": "scripts/data/build_atlas.py",
+  "attribution": "Atlas do Desenvolvimento Humano no Brasil — PNUD, Ipea e Fundação João Pinheiro; Censos Demográficos IBGE; distribuição Ipeadata. Cadastro territorial: IBGE.",
+  "output": {
+    "path": "data/atlas_municipios.csv",
+    "sha256": "a4aa7b86737fd6fdeb7bd7e178dfaf83603471189880720590699e44b58ea45a",
+    "bytes": 1122860,
+    "encoding": "UTF-8",
+    "delimiter": ",",
+    "decimal_separator": ".",
+    "missing_value": "",
+    "columns": [
+      "codigo_ibge",
+      "municipio",
+      "uf",
+      "regiao",
+      "ano",
+      "idhm",
+      "idhm_educacao",
+      "idhm_renda",
+      "idhm_longevidade",
+      "renda_per_capita"
+    ],
+    "primary_key": [
+      "codigo_ibge",
+      "ano"
+    ]
+  },
+  "coverage": {
+    "years": [
+      1991,
+      2000,
+      2010
+    ],
+    "geography_year": 2010,
+    "expected_municipal_units": 5565,
+    "observed_municipal_units_per_series_year": 5564,
+    "complete_rows": 16692,
+    "missing_municipal_units": [
+      {
+        "codigo_ibge": "2206720",
+        "municipio": "Nazária",
+        "uf": "PI",
+        "regiao": "Nordeste"
+      }
+    ]
+  },
+  "series": {
+    "idhm": {
+      "SERCODIGO": "ADH_IDHM",
+      "SERNOME": "IDHM - Índice de Desenvolvimento Humano Municipal (Censo)",
+      "SERCOMENTARIO": "O Índice de Desenvolvimento Humano (IDH) foi criado com base nas três dimensões conceituais básicas do desenvolvimento humano: uma vida longa e saudável, acesso ao conhecimento e um padrão de vida decente. Mais Informações: <b><a href=\"https://www.atlasbrasil.org.br/\" target=\"_blank\">Atlas do Desenvolvimento Humano no Brasil</a></b>.<p>. <p>Para acessar outras desagregações, utilize os atalhos a seguir: \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726509&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Brasil</a> | <a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726509&MINDATA=1970&MAXDATA=2030&TNIVID=1&TPAID=1&module=S>por Região</a> | <a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726509&MINDATA=1970&MAXDATA=2030&TNIVID=2&TPAID=1&module=S>por UF</a>.\r\n<p>Para acessar as <b>séries encadeadas (Censo + Pnad)</b>, utilize os atalhos a seguir:  \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40038&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Longevidade</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40039&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Educação</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40040&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Renda</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40037&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM</a>.\r\n<p><a href=https://www.ipeadata.gov.br/Default.aspx target=_blank>Ipeadata - Página principal</a>.",
+      "SERATUALIZACAO": "2023-03-08T10:46:33-03:00",
+      "BASNOME": "Social",
+      "FNTSIGLA": "IPEA/ADH Censo IBGE",
+      "FNTNOME": "Atlas do Desenvolvimento Humano (Censo Demográfico)",
+      "FNTURL": "www.atlasbrasil.org.br",
+      "PERNOME": "Decenal",
+      "UNINOME": "-",
+      "MULNOME": null,
+      "SERSTATUS": null,
+      "TEMCODIGO": 85,
+      "PAICODIGO": "BRA",
+      "SERNUMERICA": true
+    },
+    "idhm_educacao": {
+      "SERCODIGO": "ADH_IDHM_E",
+      "SERNOME": "IDHM - Índice de Desenvolvimento Humano Municipal - educação (Censo)",
+      "SERCOMENTARIO": "O Índice de Desenvolvimento Humano (IDH) foi criado com base nas três dimensões conceituais básicas do desenvolvimento humano: uma vida longa e saudável, acesso ao conhecimento e um padrão de vida decente. Mais Informações: <b><a href=\"https://www.atlasbrasil.org.br/\" target=\"_blank\">Atlas do Desenvolvimento Humano no Brasil</a></b>.<p>.<p>Para acessar outras desagregações, utilize os atalhos a seguir: \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726511&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Brasil</a> | <a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726511&MINDATA=1970&MAXDATA=2030&TNIVID=1&TPAID=1&module=S>por Região</a> | <a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726511&MINDATA=1970&MAXDATA=2030&TNIVID=2&TPAID=1&module=S>por UF</a>.\r\n<p>Para acessar as <b>séries encadeadas (Censo + Pnad)</b>, utilize os atalhos a seguir:  \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40038&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Longevidade</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40039&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Educação</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40040&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Renda</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40037&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM</a>.\r\n<p><a href=https://www.ipeadata.gov.br/Default.aspx target=_blank>Ipeadata - Página principal</a>.",
+      "SERATUALIZACAO": "2023-03-08T10:46:33-03:00",
+      "BASNOME": "Social",
+      "FNTSIGLA": "IPEA/ADH Censo IBGE",
+      "FNTNOME": "Atlas do Desenvolvimento Humano (Censo Demográfico)",
+      "FNTURL": "www.atlasbrasil.org.br",
+      "PERNOME": "Decenal",
+      "UNINOME": "-",
+      "MULNOME": null,
+      "SERSTATUS": null,
+      "TEMCODIGO": 85,
+      "PAICODIGO": "BRA",
+      "SERNUMERICA": true
+    },
+    "idhm_renda": {
+      "SERCODIGO": "ADH_IDHM_R",
+      "SERNOME": "IDHM - Índice de Desenvolvimento Humano Municipal - renda (Censo)",
+      "SERCOMENTARIO": "O Índice de Desenvolvimento Humano (IDH) foi criado com base nas três dimensões conceituais básicas do desenvolvimento humano: uma vida longa e saudável, acesso ao conhecimento e um padrão de vida decente. Mais Informações: <b><a href=\"https://www.atlasbrasil.org.br/\" target=\"_blank\">Atlas do Desenvolvimento Humano no Brasil</a></b>.<p>. <p>Para acessar outras desagregações, utilize os atalhos a seguir: \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726528&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Brasil</a> | <a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726528&MINDATA=1970&MAXDATA=2030&TNIVID=1&TPAID=1&module=S>por Região</a> | <a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726528&MINDATA=1970&MAXDATA=2030&TNIVID=2&TPAID=1&module=S>por UF</a>.\r\n<p>Para acessar as <b>séries encadeadas (Censo + Pnad)</b>, utilize os atalhos a seguir:  \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40038&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Longevidade</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40039&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Educação</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40040&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Renda</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40037&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM</a>.\r\n<p><a href=https://www.ipeadata.gov.br/Default.aspx target=_blank>Ipeadata - Página principal</a>.",
+      "SERATUALIZACAO": "2023-03-08T10:46:33-03:00",
+      "BASNOME": "Social",
+      "FNTSIGLA": "IPEA/ADH Censo IBGE",
+      "FNTNOME": "Atlas do Desenvolvimento Humano (Censo Demográfico)",
+      "FNTURL": "www.atlasbrasil.org.br",
+      "PERNOME": "Decenal",
+      "UNINOME": "-",
+      "MULNOME": null,
+      "SERSTATUS": null,
+      "TEMCODIGO": 85,
+      "PAICODIGO": "BRA",
+      "SERNUMERICA": true
+    },
+    "idhm_longevidade": {
+      "SERCODIGO": "ADH_IDHM_L",
+      "SERNOME": "IDHM - Índice de Desenvolvimento Humano Municipal - longevidade (Censo)",
+      "SERCOMENTARIO": "O Índice de Desenvolvimento Humano (IDH) foi criado com base nas três dimensões conceituais básicas do desenvolvimento humano: uma vida longa e saudável, acesso ao conhecimento e um padrão de vida decente. Mais Informações: <b><a href=\"https://www.atlasbrasil.org.br/\" target=\"_blank\">Atlas do Desenvolvimento Humano no Brasil</a></b>.<p>.<p>Para acessar outras desagregações, utilize os atalhos a seguir: \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726519&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Brasil</a> | <a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726519&MINDATA=1970&MAXDATA=2030&TNIVID=1&TPAID=1&module=S>por Região</a> | <a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096726519&MINDATA=1970&MAXDATA=2030&TNIVID=2&TPAID=1&module=S>por UF</a>.\r\n<p>Para acessar as <b>séries encadeadas (Censo + Pnad)</b>, utilize os atalhos a seguir:  \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40038&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Longevidade</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40039&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Educação</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40040&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM Renda</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=40037&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>IDHM</a>.\r\n<p><a href=https://www.ipeadata.gov.br/Default.aspx target=_blank>Ipeadata - Página principal</a>.",
+      "SERATUALIZACAO": "2023-03-08T10:46:33-03:00",
+      "BASNOME": "Social",
+      "FNTSIGLA": "IPEA/ADH Censo IBGE",
+      "FNTNOME": "Atlas do Desenvolvimento Humano (Censo Demográfico)",
+      "FNTURL": "www.atlasbrasil.org.br",
+      "PERNOME": "Decenal",
+      "UNINOME": "-",
+      "MULNOME": null,
+      "SERSTATUS": null,
+      "TEMCODIGO": 85,
+      "PAICODIGO": "BRA",
+      "SERNUMERICA": true
+    },
+    "renda_per_capita": {
+      "SERCODIGO": "ADH_RDPC",
+      "SERNOME": "Renda per capita média (Atlas DH - Censo)",
+      "SERCOMENTARIO": "Razão entre o somatório da renda de todos os indivíduos residentes em domicílios particulares permanentes e o número total desses indivíduos. Valores em reais de 01/agosto de 2010. Este indicador faz parte do bloco de indicadores que contém nível de renda; de pobreza e de desigualdade de renda. São indicadores utilizados na análise do IDHM (Índice de Desenvolvimento Humano Municipal). Nota: elaborado por PNUD, IPEA e FJP a partir dos microdados de Censos Demográficos do IBGE. Mais Informações: <a href= \"../doc/Metodologia ADH.pdf\">Metodologia do Atlas do Desenvolvimento Humano</a>.\r\n Fonte primária aguarda microdados do Censo 2022. <p>Para acessar outras desagregações, utilize os atalhos a seguir: \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725989&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Brasil</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725989&MINDATA=1970&MAXDATA=2030&TNIVID=1&TPAID=1&module=S>por Região</a> | \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725989&MINDATA=1970&MAXDATA=2030&TNIVID=2&TPAID=1&module=S>por UF</a>. <p>\r\n<p>por Gênero > \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725991&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Homens</a>  |    \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725992&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Mulheres</a>\r\n<p>por Cor/Raça > \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725990&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Brancos</a>  |    \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725993&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Pretos/Pardos</a>\r\n<p>por tipo domicilio > \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725994&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Rural</a>  |    \r\n<a href=https://www.ipeadata.gov.br/ExibeSerieR.aspx?stub=1&serid=2096725995&MINDATA=1970&MAXDATA=2030&TNIVID=0&TPAID=1&module=S>Urbano</a>\r\n<p><a href=\"http://www.ipeadata.gov.br/Default.aspx\" target=\"_blank\">Ipeadata - Página principal</a>.",
+      "SERATUALIZACAO": "2022-09-30T12:00:00-03:00",
+      "BASNOME": "Social",
+      "FNTSIGLA": "IPEA/ADH Censo IBGE",
+      "FNTNOME": "Atlas do Desenvolvimento Humano (Censo Demográfico)",
+      "FNTURL": "www.atlasbrasil.org.br",
+      "PERNOME": "Decenal",
+      "UNINOME": "R$, a preços do ano 2010",
+      "MULNOME": null,
+      "SERSTATUS": null,
+      "TEMCODIGO": 102,
+      "PAICODIGO": "BRA",
+      "SERNUMERICA": true
+    }
+  },
+  "sources": [
+    {
+      "url": "https://servicodados.ibge.gov.br/api/v1/localidades/estados",
+      "resolved_url": "https://servicodados.ibge.gov.br/api/v1/localidades/estados",
+      "downloaded_at_utc": "2026-11-19T02:43:16+00:00",
+      "content_type": "application/json; charset=utf-8",
+      "last_modified": null,
+      "sha256": "7ca1368dea3af83cba1af84ae8a7e88f1173c97586831d086cc8b3c1ba9c6596",
+      "bytes": 2446,
+      "path": "raw/7ca1368dea3af83cba1af84ae8a7e88f1173c97586831d086cc8b3c1ba9c6596.json"
+    },
+    {
+      "url": "https://apisidra.ibge.gov.br/values/t/1301/n6/all/v/615/p/2010",
+      "resolved_url": "https://apisidra.ibge.gov.br/values/t/1301/n6/all/v/615/p/2010",
+      "downloaded_at_utc": "2026-11-19T02:43:16+00:00",
+      "content_type": "application/json; charset=utf-8",
+      "last_modified": null,
+      "sha256": "857b91fa4b3678cf526e74f9952d34f381e4265ee441e4b9e883e5fdee5a8ef5",
+      "bytes": 1627105,
+      "path": "raw/857b91fa4b3678cf526e74f9952d34f381e4265ee441e4b9e883e5fdee5a8ef5.json"
+    },
+    {
+      "url": "https://servicodados.ibge.gov.br/api/v1/localidades/municipios",
+      "resolved_url": "https://servicodados.ibge.gov.br/api/v1/localidades/municipios",
+      "downloaded_at_utc": "2026-11-19T02:43:17+00:00",
+      "content_type": "application/json; charset=utf-8",
+      "last_modified": null,
+      "sha256": "86ecdccdf97d72e7e5e46f0854cfcea8bacc28154cc1bc4ed0e6110e3a6c9c02",
+      "bytes": 2470036,
+      "path": "raw/86ecdccdf97d72e7e5e46f0854cfcea8bacc28154cc1bc4ed0e6110e3a6c9c02.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Territorios",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Territorios",
+      "downloaded_at_utc": "2026-11-19T02:43:18+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "56a20c4b84634293531da7e5769eac4ebfb97723b5492523950b7f7ab17a7cf6",
+      "bytes": 3341705,
+      "path": "raw/56a20c4b84634293531da7e5769eac4ebfb97723b5492523950b7f7ab17a7cf6.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM')",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM')",
+      "downloaded_at_utc": "2026-11-19T02:43:25+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "a7285b67c335c697a71266adae1506a9af6098d76a55bac6116fea8bdd9aecd6",
+      "bytes": 2250,
+      "path": "raw/a7285b67c335c697a71266adae1506a9af6098d76a55bac6116fea8bdd9aecd6.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM')/Valores",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM')/Valores",
+      "downloaded_at_utc": "2026-11-19T02:43:27+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "8309d2d8b108809e1d6c8511a3b93b5a390a2da23987d034b8b02beb66f4ea18",
+      "bytes": 2412917,
+      "path": "raw/8309d2d8b108809e1d6c8511a3b93b5a390a2da23987d034b8b02beb66f4ea18.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_E')",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_E')",
+      "downloaded_at_utc": "2026-11-19T02:43:27+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "8c73000c78ac6612e95ec2373ab7d9365274810a1ff0d886868c7a8cba74d61f",
+      "bytes": 2272,
+      "path": "raw/8c73000c78ac6612e95ec2373ab7d9365274810a1ff0d886868c7a8cba74d61f.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_E')/Valores",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_E')/Valores",
+      "downloaded_at_utc": "2026-11-19T02:43:29+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "91a7b75e9a106e93327df80689774192a703935a79286a67e6ef78e4e8e3c029",
+      "bytes": 2446446,
+      "path": "raw/91a7b75e9a106e93327df80689774192a703935a79286a67e6ef78e4e8e3c029.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_R')",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_R')",
+      "downloaded_at_utc": "2026-11-19T02:43:29+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "ad125a828dba82a687b8f59dfe261d3abb3366e6090edcc50c86f1954df1c123",
+      "bytes": 2260,
+      "path": "raw/ad125a828dba82a687b8f59dfe261d3abb3366e6090edcc50c86f1954df1c123.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_R')/Valores",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_R')/Valores",
+      "downloaded_at_utc": "2026-11-19T02:43:31+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "b5f79f67562868fd436f318f4290e0fde62a6faff0d8ef1eb4e29adabac294ea",
+      "bytes": 2446490,
+      "path": "raw/b5f79f67562868fd436f318f4290e0fde62a6faff0d8ef1eb4e29adabac294ea.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_L')",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_L')",
+      "downloaded_at_utc": "2026-11-19T02:43:31+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "4e0b0f3ccb13351dc849c925eb92d767b4f9b907e34961377aece085d970a84c",
+      "bytes": 2265,
+      "path": "raw/4e0b0f3ccb13351dc849c925eb92d767b4f9b907e34961377aece085d970a84c.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_L')/Valores",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_IDHM_L')/Valores",
+      "downloaded_at_utc": "2026-11-19T02:43:33+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "fe30bcde7555d61c93e4bbf4a4bc18a802a5169d39d6dcd882c452ffda149edc",
+      "bytes": 2446458,
+      "path": "raw/fe30bcde7555d61c93e4bbf4a4bc18a802a5169d39d6dcd882c452ffda149edc.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_RDPC')",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_RDPC')",
+      "downloaded_at_utc": "2026-11-19T02:43:33+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "e96809e4743a1b58a5d49b7186d6506d4009045c33aa35d439dee52cf1de4127",
+      "bytes": 2895,
+      "path": "raw/e96809e4743a1b58a5d49b7186d6506d4009045c33aa35d439dee52cf1de4127.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_RDPC')/Valores",
+      "resolved_url": "https://www.ipeadata.gov.br/api/odata4/Metadados('ADH_RDPC')/Valores",
+      "downloaded_at_utc": "2026-11-19T02:43:35+00:00",
+      "content_type": "application/json; odata.metadata=minimal; odata.streaming=true",
+      "last_modified": null,
+      "sha256": "63a0fea51210cb200c5fa4eb74b9176a34d53e5badce2a4af403d5f0f16869fe",
+      "bytes": 2429041,
+      "path": "raw/63a0fea51210cb200c5fa4eb74b9176a34d53e5badce2a4af403d5f0f16869fe.json"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/doc/Metodologia%20ADH.pdf",
+      "resolved_url": "https://www.ipeadata.gov.br/doc/Metodologia%20ADH.pdf",
+      "downloaded_at_utc": "2026-11-19T02:43:36+00:00",
+      "content_type": "application/pdf",
+      "last_modified": "Mon, 11 Mar 2024 18:34:12 GMT",
+      "sha256": "84edd199af1cf48665d991885659ed6a143368373d97f57168d54d8bde5772bc",
+      "bytes": 1594201,
+      "path": "raw/84edd199af1cf48665d991885659ed6a143368373d97f57168d54d8bde5772bc.pdf"
+    },
+    {
+      "url": "https://www.ipeadata.gov.br/api/",
+      "resolved_url": "https://www.ipeadata.gov.br/api/",
+      "downloaded_at_utc": "2026-11-19T02:43:36+00:00",
+      "content_type": "text/html",
+      "last_modified": "Tue, 31 Jul 2018 15:41:34 GMT",
+      "sha256": "410b01efad77ace8a42c910ea2e5aeb8c514e20871be0897af63a70f53afc16d",
+      "bytes": 93024,
+      "path": "raw/410b01efad77ace8a42c910ea2e5aeb8c514e20871be0897af63a70f53afc16d.html"
+    }
+  ],
+  "source_paths_relative_to": "data/",
+  "excluded_nonmunicipal_observations": {
+    "idhm": 84,
+    "idhm_educacao": 84,
+    "idhm_renda": 84,
+    "idhm_longevidade": 84,
+    "renda_per_capita": 84
+  },
+  "mapping": {
+    "strategy": "Exact seven-digit IBGE code against 2010 SIDRA roster and captured current IBGE roster",
+    "unmatched_indicator_codes": [],
+    "historical_code_overrides": [],
+    "ipeadata_name_differences": [
+      {
+        "codigo_ibge": "1400605",
+        "ibge_sidra_2010_period": "São Luiz do Anauá",
+        "ipeadata": "São Luiz"
+      },
+      {
+        "codigo_ibge": "1502954",
+        "ibge_sidra_2010_period": "Eldorado do Carajás",
+        "ipeadata": "Eldorado dos Carajás"
+      },
+      {
+        "codigo_ibge": "1506500",
+        "ibge_sidra_2010_period": "Santa Izabel do Pará",
+        "ipeadata": "Santa Isabel do Pará"
+      },
+      {
+        "codigo_ibge": "1600154",
+        "ibge_sidra_2010_period": "Pedra Branca do Amapari",
+        "ipeadata": "Pedra Branca do Amaparí"
+      },
+      {
+        "codigo_ibge": "1706001",
+        "ibge_sidra_2010_period": "Couto Magalhães",
+        "ipeadata": "Couto de Magalhães"
+      },
+      {
+        "codigo_ibge": "1708254",
+        "ibge_sidra_2010_period": "Tabocão",
+        "ipeadata": "Fortaleza do Tabocão"
+      },
+      {
+        "codigo_ibge": "1720499",
+        "ibge_sidra_2010_period": "São Valério",
+        "ipeadata": "São Valério da Natividade"
+      },
+      {
+        "codigo_ibge": "2200954",
+        "ibge_sidra_2010_period": "Aroeiras do Itaim",
+        "ipeadata": "Aroeiras de Itaim"
+      },
+      {
+        "codigo_ibge": "2300150",
+        "ibge_sidra_2010_period": "Acarape",
+        "ipeadata": "Acarapé"
+      },
+      {
+        "codigo_ibge": "2304277",
+        "ibge_sidra_2010_period": "Ereré",
+        "ipeadata": "Ererê"
+      },
+      {
+        "codigo_ibge": "2306306",
+        "ibge_sidra_2010_period": "Itapajé",
+        "ipeadata": "Itapagé"
+      },
+      {
+        "codigo_ibge": "2400208",
+        "ibge_sidra_2010_period": "Assú",
+        "ipeadata": "Açu"
+      },
+      {
+        "codigo_ibge": "2401206",
+        "ibge_sidra_2010_period": "Arez",
+        "ipeadata": "Arês"
+      },
+      {
+        "codigo_ibge": "2401305",
+        "ibge_sidra_2010_period": "Campo Grande",
+        "ipeadata": "Augusto Severo"
+      },
+      {
+        "codigo_ibge": "2408409",
+        "ibge_sidra_2010_period": "Olho d'Água do Borges",
+        "ipeadata": "Olho-d'Água do Borges"
+      },
+      {
+        "codigo_ibge": "2410306",
+        "ibge_sidra_2010_period": "Serra Caiada",
+        "ipeadata": "Presidente Juscelino"
+      },
+      {
+        "codigo_ibge": "2412559",
+        "ibge_sidra_2010_period": "São Miguel do Gostoso",
+        "ipeadata": "São Miguel de Touros"
+      },
+      {
+        "codigo_ibge": "2512606",
+        "ibge_sidra_2010_period": "Quixaba",
+        "ipeadata": "Quixabá"
+      },
+      {
+        "codigo_ibge": "2513653",
+        "ibge_sidra_2010_period": "Joca Claudino",
+        "ipeadata": "Santarém"
+      },
+      {
+        "codigo_ibge": "2513968",
+        "ibge_sidra_2010_period": "São Domingos",
+        "ipeadata": "São Domingos de Pombal"
+      },
+      {
+        "codigo_ibge": "2515401",
+        "ibge_sidra_2010_period": "São Vicente do Seridó",
+        "ipeadata": "Seridó"
+      },
+      {
+        "codigo_ibge": "2516409",
+        "ibge_sidra_2010_period": "Tacima",
+        "ipeadata": "Campo de Santana"
+      },
+      {
+        "codigo_ibge": "2601607",
+        "ibge_sidra_2010_period": "Belém do São Francisco",
+        "ipeadata": "Belém de São Francisco"
+      },
+      {
+        "codigo_ibge": "2606903",
+        "ibge_sidra_2010_period": "Iguaracy",
+        "ipeadata": "Iguaraci"
+      },
+      {
+        "codigo_ibge": "2607604",
+        "ibge_sidra_2010_period": "Ilha de Itamaracá",
+        "ipeadata": "Itamaracá"
+      },
+      {
+        "codigo_ibge": "2608503",
+        "ibge_sidra_2010_period": "Lagoa de Itaenga",
+        "ipeadata": "Lagoa do Itaenga"
+      },
+      {
+        "codigo_ibge": "2613800",
+        "ibge_sidra_2010_period": "São Vicente Férrer",
+        "ipeadata": "São Vicente Ferrer"
+      },
+      {
+        "codigo_ibge": "2800100",
+        "ibge_sidra_2010_period": "Amparo do São Francisco",
+        "ipeadata": "Amparo de São Francisco"
+      },
+      {
+        "codigo_ibge": "2802601",
+        "ibge_sidra_2010_period": "Graccho Cardoso",
+        "ipeadata": "Gracho Cardoso"
+      },
+      {
+        "codigo_ibge": "2902054",
+        "ibge_sidra_2010_period": "Araçás",
+        "ipeadata": "Araças"
+      },
+      {
+        "codigo_ibge": "2903300",
+        "ibge_sidra_2010_period": "Barro Preto",
+        "ipeadata": "Governador Lomanto Júnior"
+      },
+      {
+        "codigo_ibge": "2917334",
+        "ibge_sidra_2010_period": "Iuiu",
+        "ipeadata": "Iuiú"
+      },
+      {
+        "codigo_ibge": "2922250",
+        "ibge_sidra_2010_period": "Muquém do São Francisco",
+        "ipeadata": "Muquém de São Francisco"
+      },
+      {
+        "codigo_ibge": "2928505",
+        "ibge_sidra_2010_period": "Santa Terezinha",
+        "ipeadata": "Santa Teresinha"
+      },
+      {
+        "codigo_ibge": "3105509",
+        "ibge_sidra_2010_period": "Barão do Monte Alto",
+        "ipeadata": "Barão de Monte Alto"
+      },
+      {
+        "codigo_ibge": "3108909",
+        "ibge_sidra_2010_period": "Brazópolis",
+        "ipeadata": "Brasópolis"
+      },
+      {
+        "codigo_ibge": "3122900",
+        "ibge_sidra_2010_period": "Dona Euzébia",
+        "ipeadata": "Dona Eusébia"
+      },
+      {
+        "codigo_ibge": "3131802",
+        "ibge_sidra_2010_period": "Itabirinha",
+        "ipeadata": "Itabirinha de Mantena"
+      },
+      {
+        "codigo_ibge": "3147808",
+        "ibge_sidra_2010_period": "Passa Vinte",
+        "ipeadata": "Passa-Vinte"
+      },
+      {
+        "codigo_ibge": "3165206",
+        "ibge_sidra_2010_period": "São Tomé das Letras",
+        "ipeadata": "São Thomé das Letras"
+      },
+      {
+        "codigo_ibge": "3200706",
+        "ibge_sidra_2010_period": "Atílio Vivácqua",
+        "ipeadata": "Atilio Vivacqua"
+      },
+      {
+        "codigo_ibge": "3303807",
+        "ibge_sidra_2010_period": "Paraty",
+        "ipeadata": "Parati"
+      },
+      {
+        "codigo_ibge": "3305901",
+        "ibge_sidra_2010_period": "Trajano de Moraes",
+        "ipeadata": "Trajano de Morais"
+      },
+      {
+        "codigo_ibge": "3506607",
+        "ibge_sidra_2010_period": "Biritiba Mirim",
+        "ipeadata": "Biritiba-Mirim"
+      },
+      {
+        "codigo_ibge": "3515004",
+        "ibge_sidra_2010_period": "Embu das Artes",
+        "ipeadata": "Embu"
+      },
+      {
+        "codigo_ibge": "3516101",
+        "ibge_sidra_2010_period": "Florínea",
+        "ipeadata": "Florínia"
+      },
+      {
+        "codigo_ibge": "3522158",
+        "ibge_sidra_2010_period": "Itaoca",
+        "ipeadata": "Itaóca"
+      },
+      {
+        "codigo_ibge": "3530607",
+        "ibge_sidra_2010_period": "Mogi das Cruzes",
+        "ipeadata": "Moji das Cruzes"
+      },
+      {
+        "codigo_ibge": "3530805",
+        "ibge_sidra_2010_period": "Mogi Mirim",
+        "ipeadata": "Moji-Mirim"
+      },
+      {
+        "codigo_ibge": "3550001",
+        "ibge_sidra_2010_period": "São Luiz do Paraitinga",
+        "ipeadata": "São Luís do Paraitinga"
+      },
+      {
+        "codigo_ibge": "4128625",
+        "ibge_sidra_2010_period": "Alto Paraíso",
+        "ipeadata": "Vila Alta"
+      },
+      {
+        "codigo_ibge": "4206108",
+        "ibge_sidra_2010_period": "Grão-Pará",
+        "ipeadata": "Grão Pará"
+      },
+      {
+        "codigo_ibge": "4209607",
+        "ibge_sidra_2010_period": "Lauro Müller",
+        "ipeadata": "Lauro Muller"
+      },
+      {
+        "codigo_ibge": "4212809",
+        "ibge_sidra_2010_period": "Balneário Piçarras",
+        "ipeadata": "Piçarras"
+      },
+      {
+        "codigo_ibge": "4213906",
+        "ibge_sidra_2010_period": "Presidente Castello Branco",
+        "ipeadata": "Presidente Castelo Branco"
+      },
+      {
+        "codigo_ibge": "4216057",
+        "ibge_sidra_2010_period": "São Cristóvão do Sul",
+        "ipeadata": "São Cristovão do Sul"
+      },
+      {
+        "codigo_ibge": "4311718",
+        "ibge_sidra_2010_period": "Maçambará",
+        "ipeadata": "Maçambara"
+      },
+      {
+        "codigo_ibge": "4315503",
+        "ibge_sidra_2010_period": "Restinga Sêca",
+        "ipeadata": "Restinga Seca"
+      },
+      {
+        "codigo_ibge": "4317103",
+        "ibge_sidra_2010_period": "Sant'Ana do Livramento",
+        "ipeadata": "Santana do Livramento"
+      },
+      {
+        "codigo_ibge": "4322855",
+        "ibge_sidra_2010_period": "Vespasiano Corrêa",
+        "ipeadata": "Vespasiano Correa"
+      },
+      {
+        "codigo_ibge": "4323770",
+        "ibge_sidra_2010_period": "Westfália",
+        "ipeadata": "Westfalia"
+      },
+      {
+        "codigo_ibge": "5000609",
+        "ibge_sidra_2010_period": "Amambai",
+        "ipeadata": "Amambaí"
+      },
+      {
+        "codigo_ibge": "5105309",
+        "ibge_sidra_2010_period": "Luciara",
+        "ipeadata": "Luciára"
+      },
+      {
+        "codigo_ibge": "5107008",
+        "ibge_sidra_2010_period": "Poxoréu",
+        "ipeadata": "Poxoréo"
+      },
+      {
+        "codigo_ibge": "5107800",
+        "ibge_sidra_2010_period": "Santo Antônio de Leverger",
+        "ipeadata": "Santo Antônio do Leverger"
+      },
+      {
+        "codigo_ibge": "5108956",
+        "ibge_sidra_2010_period": "Nova Monte Verde",
+        "ipeadata": "Nova Monte verde"
+      },
+      {
+        "codigo_ibge": "5220157",
+        "ibge_sidra_2010_period": "São Luiz do Norte",
+        "ipeadata": "São Luíz do Norte"
+      }
+    ],
+    "current_ibge_units_outside_2010_roster": [
+      {
+        "codigo_ibge": "1504752",
+        "municipio": "Mojuí dos Campos"
+      },
+      {
+        "codigo_ibge": "4212650",
+        "municipio": "Pescaria Brava"
+      },
+      {
+        "codigo_ibge": "4220000",
+        "municipio": "Balneário Rincão"
+      },
+      {
+        "codigo_ibge": "4314548",
+        "municipio": "Pinto Bandeira"
+      },
+      {
+        "codigo_ibge": "5006275",
+        "municipio": "Paraíso das Águas"
+      },
+      {
+        "codigo_ibge": "5101837",
+        "municipio": "Boa Esperança do Norte"
+      }
+    ]
+  },
+  "validation": {
+    "rows": 16695,
+    "municipalities": 5565,
+    "ufs": 27,
+    "regions": 5,
+    "unique_municipality_year": true,
+    "by_year": {
+      "1991": {
+        "rows": 5565,
+        "complete_rows": 5564
+      },
+      "2000": {
+        "rows": 5565,
+        "complete_rows": 5564
+      },
+      "2010": {
+        "rows": 5565,
+        "complete_rows": 5564
+      }
+    },
+    "missing_by_column": {
+      "idhm": 3,
+      "idhm_educacao": 3,
+      "idhm_renda": 3,
+      "idhm_longevidade": 3,
+      "renda_per_capita": 3
+    },
+    "ranges": {
+      "idhm": {
+        "min": 0.12,
+        "max": 0.862
+      },
+      "idhm_educacao": {
+        "min": 0.01,
+        "max": 0.825
+      },
+      "idhm_renda": {
+        "min": 0.229,
+        "max": 0.891
+      },
+      "idhm_longevidade": {
+        "min": 0.433,
+        "max": 0.894
+      },
+      "renda_per_capita": {
+        "min": 33.24,
+        "max": 2043.74
+      }
+    },
+    "max_idhm_geometric_mean_absolute_error": 0.0004999789677780919
+  },
+  "comparability_and_caveats": [
+    "Nazária/PI (2206720) is in the IBGE 2010 roster but absent in all five municipal Ipeadata series for all three years; its 15 indicator cells are blank. No imputation.",
+    "Municipal geography uses the roster from IBGE SIDRA table 1301, period 2010. Names are labels returned by that query at capture time and may include subsequent renamings, not guaranteed historical 2010 spellings. Earlier Atlas census indicators were spatially harmonized by the producers to 2010 areas; these are not the municipal boundaries existing in 1991 or 2000.",
+    "Brasília/DF and Fernando de Noronha/PE are included as IBGE municipal-level units, without implying ordinary municipal legal status.",
+    "Use the recalculated Atlas census series for temporal comparison. Do not mix with older Atlas methodologies, national global IDH, PNAD chained series, or current municipal boundaries.",
+    "Income is monthly household per-capita income of people in permanent private households, in BRL at 1 August 2010 prices, as verified in ADH_RDPC metadata. No inflation conversion was performed here.",
+    "UF and five-region labels come from the IBGE locality API captured at download time. Municipality codes are joined exactly as seven-character strings; no truncation, check-digit synthesis, fuzzy join or historical crosswalk was needed for this snapshot.",
+    "A simple mean of municipal IDHM or income is not an official Brazil/UF/region aggregate. This CSV contains no population weights.",
+    "Public API access does not itself establish a redistribution license. No specific dataset license was verified; preserve attribution and review source terms before redistribution."
+  ],
+  "methodology": {
+    "url": "https://www.ipeadata.gov.br/doc/Metodologia%20ADH.pdf",
+    "spatial_harmonization": "page 2",
+    "income_definition": "Renda per capita section; also ADH_RDPC SERCOMENTARIO"
+  },
+  "license": {
+    "identifier": null,
+    "status": "Specific dataset redistribution license/terms not verified; do not infer a license from public availability.",
+    "source_terms_entrypoints": [
+      "https://www.ipeadata.gov.br/",
+      "https://www.ibge.gov.br/"
+    ]
+  }
+}

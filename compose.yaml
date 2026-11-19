@@ -1,0 +1,70 @@
+name: atlas-dashboard
+
+services:
+  app:
+    image: atlas-dashboard-app:${IMAGE_TAG:-local}
+    build:
+      context: .
+      target: app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: https://dashboard.stolner.com
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /var/www/html/storage/app/atlas.sqlite
+      CACHE_STORE: file
+      SESSION_DRIVER: file
+      QUEUE_CONNECTION: sync
+    volumes:
+      - atlas-storage:/var/www/html/storage
+    networks:
+      - backend
+    stop_grace_period: 30s
+
+  nginx:
+    image: atlas-dashboard-nginx:${IMAGE_TAG:-local}
+    build:
+      context: .
+      target: nginx
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8088:8080"
+    networks:
+      - backend
+      - ingress
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    user: "65532:65532"
+    profiles: [tunnel]
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token-file /run/secrets/tunnel_token
+    secrets:
+      - tunnel_token
+    depends_on:
+      nginx:
+        condition: service_healthy
+    networks:
+      ingress:
+        ipv4_address: 172.30.88.3
+
+volumes:
+  atlas-storage:
+
+networks:
+  backend:
+    internal: true
+  # Dedicated connector boundary. Keep this IP in sync with nginx.conf.
+  ingress:
+    ipam:
+      config:
+        - subnet: 172.30.88.0/29
+
+secrets:
+  tunnel_token:
+    file: ${CLOUDFLARE_TUNNEL_TOKEN_FILE:-./deploy/secrets/tunnel-token}
