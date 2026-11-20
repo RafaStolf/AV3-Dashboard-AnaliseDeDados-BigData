@@ -4,7 +4,7 @@ import {useRoute,useRouter} from 'vue-router';
 import {PhArrowRight,PhDownloadSimple,PhLink,PhArrowCounterClockwise,PhMagnifyingGlass,PhCaretDown,PhFunnel,PhWarningCircle} from '@phosphor-icons/vue';
 import Chart from '../components/Chart.vue';
 import {bootstrap} from '../lib/api';
-import {metrics,regions,parseState,serializeState,formatMetric,number,defaults} from '../lib/view-state';
+import {metrics,regions,parseState,serializeState,resolveMunicipalities,formatMetric,number,defaults} from '../lib/view-state';
 import * as charts from '../lib/charts';
 import type {Dashboard,Bootstrap,ViewState,Year,Observation} from '../types';
 const route=useRoute(),router=useRouter();
@@ -18,6 +18,7 @@ const scoped=computed(()=>territories.value.filter(t=>(!state.value.region||t.re
 const ufs=computed(()=>[...new Set(territories.value.filter(t=>!state.value.region||t.region===state.value.region).map(t=>t.uf))].sort());
 const selectedA=computed(()=>data.value?.rows.find(r=>r.code===displayedState.value.a));
 const selectedB=computed(()=>data.value?.rows.find(r=>r.code===displayedState.value.b));
+const comparisonNames=computed(()=>[selectedA.value?.name,selectedB.value?.name].filter(Boolean).join(' × '));
 const regionLabel=computed(()=>state.value.uf||state.value.region||'Brasil');
 const displayedRegionLabel=computed(()=>displayedState.value.uf||displayedState.value.region||'Brasil');
 const refreshingRecorte=computed(()=>loading.value&&!!data.value&&serializeState(state.value)!==serializeState(displayedState.value));
@@ -27,11 +28,23 @@ async function load(){
   try{
     boot.value=await bootstrap();
     if(signal.aborted)return;
-    const s={...state.value};let corrected=false;
-    if(s.uf&&!ufs.value.includes(s.uf)){s.uf='';corrected=true}
-    const available=territories.value.filter(t=>(!s.region||t.region===s.region)&&(!s.uf||t.uf===s.uf));
-    for(const k of ['a','b'] as const)if(!available.some(t=>t.code===s[k])){s[k]=(k==='b'?available.find(t=>t.code!==s.a):available[0])?.code??'';corrected=true}
-    if(corrected){notice.value='A seleção foi ajustada aos municípios disponíveis neste recorte.';await update(s,true);return}
+    const s={...state.value};
+    let correction='';
+    if(s.uf&&!ufs.value.includes(s.uf)){
+      correction=s.region
+        ? `A UF ${s.uf} está fora do recorte. Exibindo todos os municípios da região ${s.region}.`
+        : `A UF ${s.uf} não consta na base. Exibindo todo o Brasil.`;
+      s.uf='';
+    }
+    const codes=territories.value.filter(t=>(!s.region||t.region===s.region)&&(!s.uf||t.uf===s.uf)).map(t=>t.code);
+    Object.assign(s,resolveMunicipalities(s,codes));
+    if(serializeState(s)!==serializeState(state.value)){
+      if(!correction&&(section.value==='compare'||section.value==='evolution'))correction='Os municípios selecionados foram ajustados ao filtro.';
+      const path=route.path;
+      await update(s,true);
+      if(route.path===path&&serializeState(state.value)===serializeState(s))notice.value=correction;
+      return;
+    }
     const res=await fetch('/api/dashboard?'+serializeState(s),{signal,headers:{Accept:'application/json'}});
     if(!res.ok)throw new Error(res.status===429?'Muitas consultas em sequência. Aguarde um momento e tente novamente.':'Não foi possível consultar os indicadores. Tente novamente.');
     const result:Dashboard=await res.json();
@@ -49,11 +62,13 @@ function selectMapUf(code:string){
   update({uf:state.value.uf===uf?'':uf,region:state.value.region&&region!==state.value.region?'':state.value.region});
 }
 async function copy(){try{await navigator.clipboard.writeText(location.href);copied.value=true;setTimeout(()=>copied.value=false,2500)}catch{notice.value='Copie o endereço da barra do navegador para compartilhar este recorte.'}}
-watch(()=>[route.query,route.path],()=>{page.value=1;load()},{immediate:true});
+watch(()=>[route.query,route.path],()=>{page.value=1;notice.value='';load()},{immediate:true});
 onBeforeUnmount(()=>request?.abort());
 const comparison=computed(()=>charts.comparison(selectedA.value,selectedB.value));
 const evolution=computed(()=>data.value?charts.evolution(data.value,section.value==='compare'?'idhm':data.value.metric,displayedState.value.a,displayedState.value.b):{});
 const ranking=computed(()=>charts.ranking(data.value?.rows??[],data.value?.metric??'idhm',bottom.value));
+const rankingCount=computed(()=>Math.min(data.value?.summary.valid??0,charts.rankingLimit));
+const rankingHeight=computed(()=>Math.max(120,rankingCount.value*33+28));
 const growth=computed(()=>data.value?charts.growth(data.value,data.value.metric):{});
 const distribution=computed(()=>data.value?charts.distribution(data.value,data.value.metric):{});
 const association=computed(()=>data.value?charts.association(data.value):{});
@@ -71,11 +86,11 @@ const articleLink=computed(()=>({compare:'/analises/dimensoes-desenvolvimento',o
   <div class="filter-mobile"><button class="text-button" @click="filtersOpen=!filtersOpen" :aria-expanded="filtersOpen"><PhFunnel :size="18"/>Filtros <PhCaretDown :size="15"/></button><span>{{regionLabel}} · {{state.year}}</span></div>
   <section class="filters" :class="{expanded:filtersOpen}" aria-label="Filtros do dashboard">
     <div class="geography-filters"><label>Região<select :value="state.region" @change="field($event,'region')"><option value="">Todas as regiões</option><option v-for="r in regions" :key="r">{{r}}</option></select></label><label class="uf-filter">UF<select :value="state.uf" @change="field($event,'uf')"><option value="">Todas</option><option v-for="uf in ufs" :key="uf">{{uf}}</option></select></label></div>
-    <div v-if="section==='compare'||section==='evolution'" class="municipality-filters"><label>Município A<select :value="state.a" @change="field($event,'a')"><option v-for="t in scoped" :key="t.code" :value="t.code">{{t.name}} ({{t.uf}})</option></select></label><label>Município B<select :value="state.b" @change="field($event,'b')"><option v-for="t in scoped" :key="t.code" :value="t.code">{{t.name}} ({{t.uf}})</option></select></label></div>
+    <div v-if="section==='compare'||section==='evolution'" class="municipality-filters"><label>Município A<select :value="state.a" @change="field($event,'a')"><option v-for="t in scoped" :key="t.code" :value="t.code">{{t.name}} ({{t.uf}})</option></select></label><label>Município B<select :value="state.b" :disabled="scoped.length<2" @change="field($event,'b')"><option v-if="scoped.length<2" value="">Sem segundo município</option><option v-else v-for="t in scoped" :key="t.code" :value="t.code">{{t.name}} ({{t.uf}})</option></select></label></div>
     <label v-if="!['compare','association'].includes(section)" class="metric-filter">Indicador<select :value="state.metric" @change="field($event,'metric')"><option v-for="(label,key) in metrics" :key="key" :value="key">{{label}}</option></select></label>
     <div class="year-filter"><span class="filter-label">Ano histórico</span><div class="segmented" role="group" aria-label="Ano histórico"><button v-for="year in periods" :key="year" :aria-pressed="state.year===year" :class="{selected:state.year===year}" @click="update({year})">{{year}}</button></div></div>
   </section>
-  <div class="context-bar" :class="{'comparison-toolbar':section==='compare'}"><span><span class="context-dot"></span>{{data?displayedRegionLabel:regionLabel}} <template v-if="data">· {{amount(data.summary.count)}} municípios</template><span v-if="loading" class="loading-text"> · Atualizando…</span></span><div><button class="text-button" @click="update({...defaults})" aria-label="Restaurar filtros"><PhArrowCounterClockwise :size="15"/><span>Limpar</span></button><button class="text-button" @click="copy"><PhLink :size="17"/>{{copied?'Link copiado':'Compartilhar'}}</button><a class="text-button" :href="'/api/export?'+serializeState(state)"><PhDownloadSimple :size="17"/>CSV</a></div></div>
+  <div class="context-bar" :class="{'comparison-toolbar':section==='compare'}"><span><span class="context-dot"></span>{{data?displayedRegionLabel:regionLabel}} <template v-if="data">· {{amount(data.summary.count)}} {{data.summary.count===1?'município':'municípios'}}</template><span v-if="loading" class="loading-text"> · Atualizando…</span></span><div><button class="text-button" @click="update({...defaults})" aria-label="Restaurar filtros"><PhArrowCounterClockwise :size="15"/><span>Limpar</span></button><button class="text-button" @click="copy"><PhLink :size="17"/>{{copied?'Link copiado':'Compartilhar'}}</button><a class="text-button" :href="'/api/export?'+serializeState(state)"><PhDownloadSimple :size="17"/>CSV</a></div></div>
   <p v-if="refreshingRecorte" class="refresh-note" role="status" aria-live="polite">Exibindo {{displayedRegionLabel}} · {{displayedState.year}} · {{metrics[displayedState.metric]}} enquanto atualizamos para {{regionLabel}} · {{state.year}} · {{metrics[state.metric]}}.</p>
   <p v-if="notice" class="notice" role="status">{{notice}} <button @click="notice=''" aria-label="Dispensar aviso">×</button></p>
   <div v-if="error" class="error-state" role="alert"><PhWarningCircle :size="30"/><h2>Não conseguimos carregar os dados</h2><p>{{error}}</p><button class="primary-button" @click="load">Tentar novamente</button></div>
@@ -83,15 +98,52 @@ const articleLink=computed(()=>({compare:'/analises/dimensoes-desenvolvimento',o
   <template v-else-if="data">
     <p v-if="data.summary.missing&&(section!=='compare'||selectedA?.idhm==null||selectedB?.idhm==null)" class="data-note">{{data.summary.missing}} município(s) sem valor para {{metrics[data.metric]}} neste ano. Ausências são preservadas e excluídas dos cálculos.</p>
     <section v-if="section==='compare'" class="comparison-section">
-      <div class="section-heading"><h2>IDHM por dimensão <span class="heading-detail">— {{selectedA?.name??'Município A'}} × {{selectedB?.name??'Município B'}} ({{data.year}})</span></h2><p class="section-caption">Educação, renda e longevidade em uma escala comum de 0 a 1.</p></div>
-      <Chart v-if="selectedA||selectedB" :option="comparison" :height="315" label="Comparação das três dimensões do IDHM entre os municípios selecionados"/>
+      <div class="section-heading"><h2>IDHM por dimensão <span v-if="comparisonNames" class="heading-detail">— {{comparisonNames}} ({{data.year}})</span></h2><p class="section-caption">Educação, renda e longevidade em uma escala comum de 0 a 1.</p></div>
+      <Chart v-if="selectedA||selectedB" :option="comparison" :height="315" :label="`IDHM de educação, renda e longevidade — ${comparisonNames} (${data.year})`"/>
       <p v-else class="empty-state">Selecione municípios com observações disponíveis.</p>
       <p class="chart-source"><strong>Fonte:</strong> {{chartSource}} · {{data.year}}</p>
       <div class="comparison-bottom"><section><h2>Evolução do IDHM <span class="heading-detail">(1991, 2000 e 2010)</span></h2><Chart :option="evolution" :height="255" label="Evolução histórica dos municípios selecionados"/></section><aside class="editorial-teaser"><span class="eyebrow">ANÁLISE</span><h3>Três dimensões,<br>muitas perspectivas</h3><p>O índice sintetiza trajetórias distintas. Explore como educação, renda e longevidade se combinam em cada município.</p><RouterLink to="/analises" class="editorial-link">Ler análises <PhArrowRight :size="20"/></RouterLink><RouterLink to="/docs/metodologia" class="secondary-link">Entenda os indicadores</RouterLink></aside></div>
     </section>
     <template v-else-if="section==='overview'">
       <div class="summary-strip"><div><span>Municípios no recorte</span><strong>{{amount(data.summary.count)}}</strong></div><div><span>{{metrics[data.metric]}} municipal mediano</span><strong>{{formatMetric(data.summary.median,data.metric)}}</strong></div><p>Um ponto de partida para explorar o Brasil.<br><RouterLink to="/docs/metodologia">Como interpretar estas medidas <PhArrowRight :size="15"/></RouterLink></p></div>
-      <div class="overview-grid"><section><div class="section-heading"><span class="eyebrow">LEITURA TERRITORIAL</span><h2>{{metrics[data.metric]}} por UF</h2><p class="section-caption">Mediana dos municípios em cada estado · {{data.year}}</p></div><div class="map-controls"><label>Explorar UF<select :value="state.uf" @change="field($event,'uf')"><option value="">Todas as UFs</option><option v-for="uf in ufs" :key="uf" :value="uf">{{uf}}</option></select></label><button v-if="state.uf" class="text-button map-clear" @click="update({uf:''})">Remover filtro {{state.uf}} ×</button><p v-else>Selecione uma UF no mapa ou na lista.</p></div><Chart :option="map" :map="true" label="Mapa do Brasil por mediana municipal em cada UF. Para filtrar com o teclado, use o campo Explorar UF. Consulte os valores na tabela de dados." @select="selectMapUf"/><p class="chart-source">Malha: IBGE · Selecione uma UF para filtrar.<br>A mediana municipal não é o IDHM oficial da UF.</p></section><section class="ranking-section"><div class="section-heading"><h2>{{bottom?'Menores':'Maiores'}} valores municipais</h2><div class="small-tabs" role="group" aria-label="Ordenação do ranking"><button :class="{selected:!bottom}" :aria-pressed="!bottom" @click="bottom=false">Maiores</button><button :class="{selected:bottom}" :aria-pressed="bottom" @click="bottom=true">Menores</button></div></div><Chart :option="ranking" :height="424" label="Ranking dos municípios no recorte selecionado"/><p class="chart-source">12 municípios do recorte · Empates ordenados pelo nome.</p></section></div>
+      <div class="overview-grid">
+        <section>
+          <div class="section-heading">
+            <span class="eyebrow">LEITURA TERRITORIAL</span>
+            <h2>{{metrics[data.metric]}} por UF</h2>
+            <p class="section-caption">Mediana municipal por UF · {{data.year}}</p>
+          </div>
+          <div class="map-controls">
+            <label>Explorar UF
+              <select :value="state.uf" @change="field($event,'uf')">
+                <option value="">Todas as UFs</option>
+                <option v-for="uf in ufs" :key="uf" :value="uf">{{uf}}</option>
+              </select>
+            </label>
+            <button v-if="state.uf" class="text-button map-clear" @click="update({uf:''})">Remover filtro {{state.uf}} <span aria-hidden="true">×</span></button>
+            <p v-else>Selecione uma UF no mapa ou na lista.</p>
+          </div>
+          <Chart :option="map" :map="true" label="Mapa do Brasil por mediana municipal em cada UF. Use o campo Explorar UF para filtrar pelo teclado ou consulte a tabela Valores do mapa por UF." @select="selectMapUf"/>
+          <p class="chart-source">
+            <template v-if="displayedState.region||displayedState.uf||data.ufSummary.some(uf=>uf.median===null)">Em cinza, UFs fora do recorte ou sem valores.<br></template>
+            Malha: IBGE · Medianas dos municípios com valor disponível.
+          </p>
+        </section>
+        <section class="ranking-section">
+          <div class="section-heading">
+            <h2>{{bottom?'Menores':'Maiores'}} valores municipais</h2>
+            <div class="small-tabs" role="group" aria-label="Ordenação do ranking">
+              <button :class="{selected:!bottom}" :aria-pressed="!bottom" @click="bottom=false">Maiores</button>
+              <button :class="{selected:bottom}" :aria-pressed="bottom" @click="bottom=true">Menores</button>
+            </div>
+          </div>
+          <template v-if="rankingCount">
+            <Chart :option="ranking" :height="rankingHeight" label="Ranking dos municípios no recorte selecionado"/>
+            <p class="chart-source">{{rankingCount===1?'1 município no ranking':rankingCount+' municípios no ranking · Empates ordenados pelo nome.'}}</p>
+          </template>
+          <p v-else class="empty-state">Nenhum município com valor para este indicador no recorte.</p>
+        </section>
+      </div>
     </template>
     <template v-else-if="section==='evolution'">
       <section class="main-chart-section"><h2>{{metrics[data.metric]}} em três momentos</h2><p class="section-caption">Trajetórias dos municípios selecionados · os períodos não representam medições anuais.</p><Chart :option="evolution" :height="350" :label="'Evolução de '+metrics[data.metric]"/></section>

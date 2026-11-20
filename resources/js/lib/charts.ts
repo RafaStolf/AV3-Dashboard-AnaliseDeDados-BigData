@@ -13,8 +13,9 @@ export function evolution(data:Dashboard,metric:Metric,a:string,b:string):EChart
   const lines=selected.filter(r=>r.length).map((r,i)=>({name:r[0]!.name+' ('+r[0]!.uf+')',type:'line',data:r.sort((x,y)=>x.year-y.year).map(v=>[v.year,v[metric]]),showSymbol:true,symbol:'circle',symbolSize:9,connectNulls:false,lineStyle:{width:3,color:i?orange:blue},itemStyle:{color:i?orange:blue},label:{show:true,position:i?'bottom':'top',color:i?orange:blue,fontWeight:600,formatter:(p:any)=>formatMetric(p.value[1],metric)}}));
   return {...base,grid:{...base.grid,left:4,right:40,top:30,bottom:48},xAxis:{type:'value',min:1991,max:2010,interval:1,axisLabel:{showMinLabel:true,showMaxLabel:true,formatter:(v:number)=>[1991,2000,2010].includes(v)?String(v):''},splitLine:{show:false},axisTick:{show:false}},yAxis:xValue(metric==='renda_per_capita'),series:lines.length?lines:[{name:'Mediana municipal do recorte',type:'line',data:data.history.map(v=>[v.year,v.value]),lineStyle:{width:3}}]} as EChartsOption;
 }
+export const rankingLimit=12;
 export function ranking(rows:Observation[],metric:Metric,bottom=false):EChartsOption{
-  const sorted=rows.filter(r=>r[metric]!=null).sort((a,b)=>(bottom?1:-1)*(a[metric]!-b[metric]!)||a.name.localeCompare(b.name)).slice(0,12);
+  const sorted=rows.filter(r=>r[metric]!=null).sort((a,b)=>(bottom?1:-1)*(a[metric]!-b[metric]!)||a.name.localeCompare(b.name)).slice(0,rankingLimit);
   return {...base,legend:{show:false},grid:{left:8,right:65,top:6,bottom:25,containLabel:true},xAxis:xValue(metric==='renda_per_capita'),yAxis:{type:'category',inverse:true,data:sorted.map(r=>r.name+' · '+r.uf),axisLine:{show:false},axisTick:{show:false},axisLabel:{fontSize:12,color:ink,width:170,overflow:'truncate'}},series:[{type:'bar',data:sorted.map(r=>r[metric]),barWidth:13,itemStyle:{color:bottom?orange:blue},label:{show:true,position:'right',color:ink,fontSize:12,formatter:(p:any)=>formatMetric(p.value,metric)}}]} as EChartsOption;
 }
 export function growth(data:Dashboard,metric:Metric):EChartsOption{
@@ -31,8 +32,42 @@ export function escapeHtml(s:string):string{return s.replace(/[&<>"']/g,c=>({'&'
 const codes:Record<string,string>={'11':'RO','12':'AC','13':'AM','14':'RR','15':'PA','16':'AP','17':'TO','21':'MA','22':'PI','23':'CE','24':'RN','25':'PB','26':'PE','27':'AL','28':'SE','29':'BA','31':'MG','32':'ES','33':'RJ','35':'SP','41':'PR','42':'SC','43':'RS','50':'MS','51':'MT','52':'GO','53':'DF'};
 export const ufCode=(code:string)=>codes[code]??'';
 export function mapOption(summaries:UfSummary[],metric:Metric,selectedUf=''):EChartsOption{
-  const values=Object.entries(codes).map(([code,uf])=>{const summary=summaries.find(s=>s.uf===uf);return {name:code,value:summary?.median??undefined,n:summary?.n??0,uf}});
+  const values=Object.entries(codes).map(([code,uf])=>{
+    const summary=summaries.find(s=>s.uf===uf);
+    return {name:code,value:summary?.median??undefined,n:summary?.n??0,uf,inScope:!!summary};
+  });
   const observed=values.map(d=>d.value).filter((v):v is number=>v!==undefined);
+  const min=observed.length?Math.min(...observed):0;
+  const max=observed.length?Math.max(...observed):1;
+  const missingColor='#e8e4dd';
   const selectedCode=Object.entries(codes).find(([,uf])=>uf===selectedUf)?.[0];
-  return {tooltip:{trigger:'item',formatter:(p:any)=>`${p.data?.uf??ufCode(p.name)}<br>Mediana municipal: ${formatMetric(p.data?.value,metric)}<br>${p.data?.n??0} municípios com valor`},visualMap:{min:observed.length?Math.min(...observed):0,max:observed.length?Math.max(...observed):1,left:'center',bottom:8,orient:'horizontal',calculable:false,inRange:{color:['#efe2ce','#cfab78','#b36732','#934014']},text:['Maior','Menor'],textStyle:{color:ink}},series:[{type:'map',map:'brasil',roam:false,aspectScale:1,top:10,bottom:65,left:10,right:10,selectedMode:'single',selectedMap:selectedCode?{[selectedCode]:true}:{},select:{label:{show:true,fontWeight:700,color:ink},itemStyle:{areaColor:'#efc183',borderColor:'#934014',borderWidth:2}},label:{show:true,color:ink,fontSize:10,formatter:(p:any)=>ufCode(p.name)},itemStyle:{borderColor:'#fbf7ef',borderWidth:1,areaColor:'#e8e4dd'},emphasis:{label:{show:true},itemStyle:{areaColor:'#d4b284'}},data:values}]} as EChartsOption;
+  return {
+    tooltip:{
+      trigger:'item',confine:true,
+      formatter:(p:any)=>{
+        const uf=p.data?.uf??ufCode(p.name);
+        if(!p.data?.inScope)return `${uf}<br>Fora do recorte atual`;
+        if(p.data.value===undefined)return `${uf}<br>Sem valores disponíveis`;
+        const n=p.data.n;
+        return `${uf}<br>Mediana municipal: ${formatMetric(p.data.value,metric)}<br>${n} ${n===1?'município':'municípios'} com valor`;
+      },
+    },
+    visualMap:{
+      type:'continuous',min,max,show:observed.length>0&&min<max,unboundedRange:false,
+      left:'center',bottom:8,orient:'horizontal',itemWidth:12,itemHeight:100,calculable:false,
+      inRange:{color:['#efe2ce','#cfab78','#b36732','#934014']},outOfRange:{color:missingColor},
+      text:[formatMetric(max,metric),formatMetric(min,metric)],textStyle:{color:ink},
+    },
+    series:[{
+      type:'map',map:'brasil',roam:false,
+      aspectScale:1,preserveAspect:'contain',top:10,bottom:65,left:10,right:10,
+      selectedMode:'single',selectedMap:selectedCode?{[selectedCode]:true}:{},
+      select:{label:{show:true,fontWeight:700,color:ink},itemStyle:{areaColor:'#efc183',borderColor:'#934014',borderWidth:2}},
+      label:{show:true,color:ink,fontSize:10,formatter:(p:any)=>ufCode(p.name)},
+      labelLayout:{hideOverlap:true},
+      itemStyle:{borderColor:'#fbf7ef',borderWidth:1,areaColor:missingColor},
+      emphasis:{label:{show:true},itemStyle:{areaColor:'#d4b284'}},
+      data:values,
+    }],
+  } as EChartsOption;
 }

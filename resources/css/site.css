@@ -15,13 +15,11 @@
 @media(min-width:1600px){.sidebar{width:300px}.site-body{margin-left:300px}}
 @media(max-width:780px){.comparison-header{padding-top:25px;padding-bottom:21px;min-height:0}.comparison-toolbar{position:static;padding:9px 0;border-bottom:1px solid #e0dacf}.comparison-toolbar>span{display:flex}.comparison-section .section-caption{display:block}.comparison-section .section-heading{padding-top:22px}.comparison-header .eyebrow{display:block}}
 
-/* The Brazil map follows the panel width and retains the GeoJSON proportions. */
-.chart--map{height:auto;aspect-ratio:1.14;min-height:310px;max-height:540px}
+.chart--map{height:auto;aspect-ratio:1;min-height:320px;max-height:540px}
 .map-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;padding:10px 12px;background:#fffaf3;border-block:1px solid var(--line)}
-.map-controls label{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--ink)}
-.map-controls select{width:125px;height:34px;padding:5px 8px;font-size:12px}
+.map-controls label{flex-direction:row;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--ink)}
+.map-controls select{width:125px;height:40px;padding:5px 8px;font-size:12px}
 .map-controls p{margin:0;font-size:11px;color:var(--muted);line-height:1.5}
-.map-controls .map-clear{font-size:11px;color:var(--orange);font-weight:650}
+.map-controls .map-clear{min-height:40px;font-size:12px;color:var(--orange);font-weight:650}
 .refresh-note{padding:9px 12px;margin-top:8px;border-left:3px solid var(--orange);background:#f7eadb;color:var(--ink);font-size:12px;line-height:1.5}
 @media(max-width:1050px){.overview-grid{grid-template-columns:minmax(0,1fr)}.ranking-section{border-left:0;border-top:1px solid var(--line);padding-left:0}.chart--map{max-height:560px}}
-@media(max-width:480px){.map-controls{align-items:flex-start}.map-controls label{width:100%;justify-content:space-between}.map-controls select{width:145px}.chart--map{min-height:320px}}
